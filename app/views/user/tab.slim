@@ -1,0 +1,25 @@
+ol.breadcrumb
+  li: a[href="#"] 社区首页
+  li: a[href="/user/tab"] Interactions
+  li.active Tabs
+h4 This is Tabs
+div.row#menu-left
+  div.col-xs-12.col-md-12
+		ul.nav.nav-tabs
+		  li[data-tab="start"]: a[href="#" data-toggle="tab"]首页
+		  li[data-tab="intro"]: a[href="#" data-toggle="tab"]介绍
+		  li[data-tab="info"]: a[href="#" data-toggle="tab"]信息
+		  li[data-tab="setup"]: a[href="#" data-toggle="tab"]设置
+		div.tab-content
+		  div.tab-pane[data-tab="start"]: p 首页
+		  div.tab-pane[data-tab="intro"]: p 介绍
+		  div.tab-pane[data-tab="info"]: p 信息
+		  div.tab-pane[data-tab="setup"]: p 设置
+
+javascript:
+  $(function(){
+  	$('ul.nav-tabs').tabs('.tab-content')
+    //$("<li><label></label><a>{0}</a><li/>").format("hello")
+  })
+  
+  

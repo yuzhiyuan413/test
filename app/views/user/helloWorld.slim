@@ -1,0 +1,10 @@
+ol.breadcrumb
+  li: a[href="#"] 社区首页
+  li: a[href="/user/helloWorld"] Angularjs
+  li.active Angularjs-HelloWorld
+h4 This is Angularjs-HelloWorld
+div.row#menu-left
+  span Your Name:
+  input.form-control[type="text" placeholder="World" ng-model="yourname"]
+  hr
+  p= "Hello" '{{yourname|| "World"}}' 

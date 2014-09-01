@@ -1,0 +1,20 @@
+ol.breadcrumb
+  li: a[href="#"] 社区首页
+  li: a[href="/user/bind"] Angularjs
+  li.active Angularjs-bind
+h4 This is Angularjs-bind
+div.row#menu-left[ng-controller="PhoneListCtrl"]
+  div.container-fluid
+    div.span2
+      | Search:
+      input[ng-model="query"]
+      | Sort By:
+      select[ng-model="order"]
+        option[value="name"] Alphabetical
+        option[value="age"] Newest
+    div.span10
+		  ul.phones
+		    li[ng-repeat="phone in phones | filter:query | orderBy:order"]
+		      = '{{phone.name}}'
+		      p= '{{phone.snippet}}'
+

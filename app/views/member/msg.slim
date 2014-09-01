@@ -1,0 +1,99 @@
+div#msg[ng-controller="MemListCtrl"]
+  ol.breadcrumb
+    li: a[href="/"] 首页
+    li: a[href="/mem"] 个人信息
+    li.active 我的好友
+
+  table.table 
+    thead
+      tr
+        th #
+        th 姓名
+        th 年龄 
+        th 宣言
+        th 创建时间
+        th 删除
+    tbody#datalist
+      tr[ng-repeat="mem in mems"]
+        td= '{{mem.id}}' 
+        td= '{{mem.nc}}'
+        td= '{{mem.age}}'
+        td= '{{mem.userid}}'
+        td= '{{mem.created_at}}'
+        td: a.remove_item[href='#' data-id="{{mem.id}}"]: i.glyphicon.glyphicon-trash
+  ul.pagination
+  =form_for(Mem.new,url:member_new_path) do |mem|
+    //div.row
+    //  div.col-lg-2
+    //    div.input-group
+    //      span.input-group-btn
+    //        button.btn.btn-default.dropdown-toggle[type="button" data-toggle="dropdown"]
+    / /         span 客户类型
+    //          span.caret
+     //       ul.dropdown-menu[role="menu"]
+    //          li: a[href="#"] 普通用户
+    //          li: a[href="#"] 特殊用户
+     //         li: a[href="#"] 高级用户
+      //    =mem.text_field :name,{class:"form-control"}
+    div.row 
+      div.col-xs-3
+        div.input-group
+          span.input-group-addon 姓名
+          =mem.text_field :nc,{class:"form-control"}
+      div.col-xs-2
+        div.input-group
+          span.input-group-addon 年龄
+          =mem.text_field :age,{class:"form-control"}
+      div.col-xs-5
+        div.input-group
+          span.input-group-addon 宣言
+          =mem.text_field :userid,{class:"form-control"}
+      div.col-xs-2 
+        button#sub-btn.btn.btn-primary[type="submit"  data-loading-text="提交中..." ] 添  加
+      input#mem_count[type="hidden" value='#{Mem.count}']
+  div.hide-item#box  
+    div.alert.alert-warning.alert-dismissible.fade.in[role="alert"]
+      button.close[type="button" data-dismiss="alert" aria-hidden="true"]
+        span[aria-hidden="true"]&times
+        span.sr-only Close
+      strong Warning! Better check yourself, you're not looking too good.
+  
+coffee:
+  $ () ->
+    $(".pagination").pagination(parseInt($('#mem_count').val()),
+      items_per_page : 5
+      current_page :0
+      callback : (page) -> 
+        appElement = document.querySelector('[ng-controller=MemListCtrl]'); 
+        $scope = angular.element(appElement).scope().get_mems(page)
+        #angular.element("PhoneListCtrl").scope()
+      )
+    #$(".dropdown-menu").delegate("li",'click',function(){
+      #$(this).closest('.input-group').find(".form-control").val($(this).text())
+    #})
+        
+
+
+    $('#new_user').ajaxForm( 
+      beforeSerialize: () -> $('#sub-btn').button('loading')
+      success: (data) ->
+        $.site.my_template_append([data.item],$('#template'),$('#datalist')) if data.valid
+        reset_data()
+      error:()->
+
+    )
+  reset_data =()->
+    $("#user_name").val("")
+    $("#user_age").val("")
+    $("#user_description").val("")
+    $('#sub-btn').button('reset') 
+
+  #get_data=(p_index)->
+    #$.post('/member/list',{page : p_index+1},(data)->
+      #$.site.my_template(data,$('#template'),$('#datalist')) 
+    #)
+  
+  $('body').on('click',".remove_item",() ->  
+    $.site.delete_item('/member/remove',$(this).attr('data-id'),this)
+  )
+    

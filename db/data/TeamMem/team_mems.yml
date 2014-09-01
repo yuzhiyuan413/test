@@ -1,0 +1,32 @@
+data:
+  - team_id: 10000
+    mem_id: 10000
+    role: 'MAIN'
+
+  - team_id: 10001
+    mem_id: 10001
+    role: 'MAIN'
+
+  - team_id: 10002
+    mem_id: 10002
+    role: 'MAIN'
+
+  - team_id: 10003
+    mem_id: 10003
+    role: 'MAIN'
+
+  - team_id: 10000
+    mem_id: 10006
+    role: 'MAIN'
+
+  - team_id: 10001
+    mem_id: 10007
+    role: 'MAIN'
+
+  - team_id: 10002
+    mem_id: 10008
+    role: 'MAIN'
+
+  - team_id: 10003
+    mem_id: 10009
+    role: 'MAIN'

@@ -1,0 +1,49 @@
+data:
+  - name: '烽火连连'
+    manifesto: '迎难而上，永不放弃'
+    logo: '1.jpg'
+    success: 56
+    failure: 36
+    score: 65
+    captain: 10000
+
+  - name: '生命之光'
+    manifesto: '生命在于运动'
+    logo: '2.jpg'
+    success: 652
+    failure: 123
+    score: 625
+    captain: 10001
+
+  - name: '魔戒远征军'
+    manifesto: '至尊戒，驭众戒'
+    logo: '3.jpg'
+    success: 56
+    failure: 36
+    score: 65
+    captain: 10002
+
+  - name: '生命之光'
+    manifesto: '生命在于运动'
+    logo: '4.jpg'
+    success: 652
+    failure: 123
+    score: 625
+    captain: 10003
+
+  - name: '屠龙团队'
+    manifesto: '屠龙一出，谁与争锋'
+    logo: '5.jpg'
+    success: 56
+    failure: 36
+    score: 65
+    captain: 10004
+
+  - name: '激情俗人'
+    manifesto: '生命在于运动'
+    logo: '6.jpg'
+    success: 652
+    failure: 123
+    score: 625
+    captain: 10005
+

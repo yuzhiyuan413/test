@@ -1,0 +1,19 @@
+nav.navbar.navbar-default[role="navigation"]
+  div.container-fluid
+    div.navbar-header
+      button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#bs-navbar-collapse")
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.navbar-brand[href=""] 社区首页
+    div.head.collapse.navbar-collapse#bs-example-navbar-collapse-1
+      ul.nav.navbar-nav
+        li[data-val='user']: a[href="/user"] Jquery UI
+        li[data-val='user']: a[href="/user"] Backbone
+        li[data-val='team']: a[href="/team"] 团队信息
+        li[data-val='member']: a[href="/member"] 个人信息
+      form.navbar-form.navbar-right[role="search"]
+        div.input-group
+          input.form-control(placeholder="Search" type="text")
+          span.input-group-addon: i.glyphicon.glyphicon-search

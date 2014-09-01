@@ -1,0 +1,24 @@
+ol.breadcrumb
+  li: a[href="#"] 社区首页
+  li: a[href="/user/menu"] Interactions
+  li.active Menu
+h4 This is Menu
+div.row#menu-left
+  div.col-xs-12.col-md-12
+    ul#menu
+      li[title="桌面设置" url=""] A
+      li[title="头像设置" url=""] B
+      li[title="应用设置" url=""]
+        | C
+        ul[title="用户管理"]
+          li[title="用户管理1" url=""] C-1
+          li[title="用户管理2" url=""] C-2
+          li[title="用户管理3" url=""] C-3
+
+         
+javascript:
+  $(function(){
+    var el = [{ title: "管理员", items: [{ title: "黄小红", url: "#" }, { title: "于志远",items:[{title:'yzy1',url:''},{title:'yzy2',url: "#"}]}]}]
+  	$("#menu").menu(el)
+  })
+  

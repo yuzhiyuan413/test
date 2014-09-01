@@ -1,0 +1,38 @@
+ol.breadcrumb
+  li: a[href="#"] 社区首页
+  li: a[href="/user/selectable"] Interactions
+  li.active selectable
+h4 Use the mouse to select elements, individually or in a group.
+div.row#menu-left
+ div.col-xs-7.col-md-8
+   ul#selectable
+     li Item 1
+     li Item 2
+     li Item 3
+     li Item 4
+     li Item 5
+     li Item 6
+     li Item 7
+
+coffee:
+  $ () ->
+    $("#selectable li").selectable()
+
+  $.fn.extend({
+    selectable:()->
+      el = $(this)
+      parent = el.parent()
+      el.mousedown(() ->
+      	el.removeClass("li-selected").removeClass("li-selecting")
+      	parent.removeClass("ul-selected")
+        $(this).addClass("li-selecting")
+        el.mousemove(()->
+        	$(this).addClass("li-selecting") 
+        )
+      ).mouseup () -> 
+          $('.li-selecting').addClass("li-selected").removeClass("li-selecting")
+          parent.addClass("ul-selected") 
+          el.unbind('mousemove')
+  }) 
+
+

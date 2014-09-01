@@ -1,0 +1,36 @@
+doctype html
+html [ng-app="memapp"]
+  head
+    title Jquery 效果库
+    =stylesheet_link_tag "application", :media => "all"
+    =javascript_include_tag "jquery" 
+    =javascript_include_tag "jquery.pagination"
+    =javascript_include_tag "pageinit"
+    =javascript_include_tag "user"
+    =javascript_include_tag "util"
+    =javascript_include_tag "angular.min" 
+    =javascript_include_tag "controller" 
+    =javascript_include_tag "json2" 
+    =javascript_include_tag "underscore" 
+    =javascript_include_tag "backbone" 
+    =csrf_meta_tags
+  body[data-val='user']
+    =render 'layouts/header'
+    div.container-fluid
+      div.row
+        div.col-xs-4.col-md-3
+          h3 Todos
+          ul.list-group
+            li.list-group-item: a[href='/user/todo']Todos
+          h3 Interactions
+          ul.list-group
+            li.list-group-item: a[href='/user/tab']Tabs
+            li.list-group-item: a[href='/user/menu']Menu
+            li.list-group-item: a[href='#']Resizable
+            li.list-group-item: a[href='/user/selectable']Selectable
+          h3 Angularjs
+          ul.list-group
+            li.list-group-item: a[href='/user/helloWorld']Angularjs-HelloWorld
+            li.list-group-item: a[href='/user/bind']Angularjs-bind
+        div.col-xs-8.col-md-9
+          =yield

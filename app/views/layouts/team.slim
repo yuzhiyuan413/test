@@ -1,0 +1,25 @@
+doctype html
+html
+  head
+    title 社区
+    =stylesheet_link_tag "application", :media => "all"
+    =javascript_include_tag "application" 
+    =csrf_meta_tags
+  body[data-val='team']
+    =render 'layouts/header'
+    div.container-fluid
+      div.row
+        div.col-xs-4.col-sm-3.col-md-2
+          div.list-group
+            a.list-group-item[href='']
+              i.glyphicon.glyphicon-user
+                span< 团队设置
+            a.list-group-item[href='/team/chal']
+              i.glyphicon.glyphicon-th-large
+                span< 挑战团队
+            a.list-group-item[href='']
+              i.glyphicon.glyphicon-envelope
+                span< 消息
+                span.badge
+        div.col-xs-8.col-sm-9.col-md-10
+          = yield

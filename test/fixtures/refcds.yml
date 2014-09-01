@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  groupcd: MyString
+  typcd: MyString
+  fdesc: MyString
+  val1: MyString
+  val2: MyString
+  val: MyString
+  url: MyString
+
+two:
+  groupcd: MyString
+  typcd: MyString
+  fdesc: MyString
+  val1: MyString
+  val2: MyString
+  val: MyString
+  url: MyString

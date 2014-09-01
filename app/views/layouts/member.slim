@@ -1,0 +1,28 @@
+doctype html
+html [ng-app="memapp"] 
+  head
+    title 社区
+    =stylesheet_link_tag "application", :media => "all"
+    =javascript_include_tag "application" 
+    =csrf_meta_tags
+  body[data-val='member']
+    =render 'layouts/header'
+    div.container-fluid
+      div.row
+        div.col-xs-4.col-sm-3.col-md-2
+          div.list-group
+            a.list-group-item[href='#']
+              i.glyphicon.glyphicon-user
+                span< 个人中心
+            a.list-group-item[href='#']
+              i.glyphicon.glyphicon-envelope
+                span< 消息
+                span.badge
+            a.list-group-item[href='#']
+              i.glyphicon.glyphicon-picture
+                span< 头像设置
+            a.list-group-item[href='/member/msg']
+              i.glyphicon.glyphicon-heart
+                span< 我的好友
+        div.col-xs-8.col-sm-9.col-md-10
+          = yield

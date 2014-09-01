@@ -1,0 +1,220 @@
+ol.breadcrumb
+  li: a[href="#"] 社区首页
+  li: a[href="/user/todo"] Backbone
+  li.active todos
+h4 This is Todos
+
+div.row#menu-left
+  div#todoapp
+    div#todo-head
+      h2 Todos
+      input#new-todo[type="text" placeholder="What needs to be done?"]
+    div#todo-main
+      input#toggle-all[type="checkbox"]
+      label[for="toggle-all"] 全选
+      ul#todo-list
+      script#todo-item-template[type="text/template"]
+        div.view
+          <% if(done){%>
+            input.toggle-item[type="checkbox" checked="checked"]
+          <%}else{%>
+            input.toggle-item[type="checkbox"]
+          <%}%>
+          label[for="toggle-item"] ${title}
+          a.delete 删除
+          a.edit 编辑
+        input.edit[type="text" value="${title}"]
+      div.split-control
+    div#todo-foot
+    ul.pagination
+    div#no-data
+      p 暂无数据记录
+    script#todo-foot-template[type="text/template"]
+      div#left-todo
+        span ${remain} item left
+      <% if(done){%>
+      a#delete-all delete ${done} item
+      <%}%>
+javascript:
+  $(function(){
+    var Todo = Backbone.Model.extend({
+      defaults:{
+        id:null,
+        title:'',
+        done:false
+      },
+      toggle:function(){
+        this.set({"done":!this.get("done")});
+      }
+    });
+
+    var TodoList = Backbone.Collection.extend({
+      Model:Todo,
+      done:function(){
+        return this.where({done:true});
+      },
+      remain:function(){
+        return this.where({done:false});
+      },
+      todo_create:function(todo, func){
+        $.post("/user/todo_add",{title:todo.get("title")},function(e){
+          if(e.status) func(e);
+        },"json");
+      },
+      todo_destroy:function(todo){
+       todo.destroy({url:"/user/todo_delete/"+todo.get("id"),success:function(e){}})
+      },
+      todo_update:function(todo,func){
+        postSend("/user/todo_edit",{id:todo.get("id"),title:todo.get("title")},function(e){
+          if(e.status) func(e);
+        },"json","post");
+      }
+    });
+
+    var todolist = new TodoList();
+    var TodoView = Backbone.View.extend({
+      tagName:"li",
+      template:_.template($("#todo-item-template").html()),
+      initialize:function(){
+        this.listenTo(this.model,'change',this.render);
+        this.listenTo(this.model,'destroy',this.remove);
+      },
+      render:function(){
+        this.$el.html(this.template(this.model.toJSON()));
+        this.input = this.$("input.edit");
+        this.view = this.$(".view");
+        return this;
+      },
+      events:{
+        "click a.delete":"deleteTodo",
+        "click a.edit":"editTodo",
+        "click .toggle-item":"toggleCheck",
+        "dblclick div.view" :"editTodo",
+        "blur input.edit" :"close",
+        "keypress input.edit":"saveOnEnter"
+      },
+      close:function(e){
+        var value = this.input.val();
+        if(!value) {
+          this.deleteTodo();
+          return false;
+        }
+        this.model.get("title")==value ? this.render() : todolist.todo_update(this.model.set({"title":value}),function(e){})
+      },
+      saveOnEnter:function(e){
+        if(e.keyCode==13) this.close();
+      },
+      editTodo:function(e){
+        var value = this.input.val();
+        this.input.show();
+        this.view.hide();
+        this.input.val("").focus().val(value);
+      },
+      deleteTodo:function(e){
+        todolist.todo_destroy(this.model);
+        appview.getPage()
+      },
+      toggleCheck:function(){
+        this.model.toggle();
+      }
+    });
+
+    var AppView = Backbone.View.extend({
+      el:$("#todoapp"),
+      template:_.template($("#todo-foot-template").html()),
+      initialize:function(){
+        this.input = this.$("#new-todo");
+        this.foot = this.$("#todo-foot");
+        this.main = this.$("#todo-main");
+        this.no = this.$("#no-data");
+        this.checkbox = this.$("#toggle-all")[0];
+        this.listenTo(todolist,'add',this.add_one);
+        this.listenTo(todolist,'all',this.render);
+        this.getPage();
+      },
+      fetch:function(total){
+        var me = this;
+        $(".pagination").pagination(parseInt(total), {
+          items_per_page: 4,
+          current_page: 0,
+          callback: function(pindex) {
+            var list = new TodoList();
+            list.fetch({url:"/user/todo_list/"+pindex,success:function(data){
+              if(list.length){
+                me.init_list(list);
+              }
+              else{
+                if(!todolist.length) me.no.show();
+              }
+            }});
+          }
+        });
+      },
+      init_list:function(list){
+        $("#todo-list").html("");
+        todolist.remove(todolist.models)
+        _.each(list.models,function(item){
+          item.get("done")=="0"?item.set({"done":true}):item.set({"done":false});
+          var model = new Todo({id:item.get("id"),"title":item.get("title"),"done":item.get("done")});
+          todolist.add(model)
+        });
+      },
+      getPage:function(){
+        var me = this;
+        $.post("/user/todo_count",function(page){
+          me.fetch(page)
+        })
+      },
+      render:function(){
+        if(todolist.length){
+          this.main.show();
+          this.foot.show();
+          this.no.hide();
+          var done = todolist.done().length;
+          var remain = todolist.remain().length;
+          this.foot.html(this.template({done:done,remain:remain}));
+        }
+        else{
+          this.main.hide();
+          this.foot.hide();
+        }
+        this.checkbox.checked = !remain
+      },
+      add_one:function(todo){
+        var view = new TodoView({model:todo});
+        $("#todo-list").append(view.render().el);
+      },
+      events:{
+        "keypress #new-todo":"createOnEnter",
+        "click #toggle-all":"toggleAll",
+        "click #delete-all":"deleteAll"
+      },
+      createOnEnter:function(e){
+        if(e.keyCode!=13) return;
+        if(!this.input.val()) return;
+        var todo = new Todo({title:this.input.val()})
+        var me = this.input;
+        todolist.todo_create(todo, function(e){
+          todolist.add(todo.set({"id":e.data.id}));
+          me.val("");
+          appview.getPage()
+        });
+      },
+      toggleAll:function(){
+        var done = this.checkbox.checked;
+        todolist.each(function(todo){
+          todo.set({"done":done});
+        });
+      },
+      deleteAll:function(){
+        //var ids = _.map(todolist.done(),function(todo){return todo.get("id")}).join(',');
+        _.each(todolist.done(),function(todo){
+          todolist.todo_destroy(todo);
+        });
+        appview.getPage()
+        return false;
+      }
+    });
+    var appview = new AppView();
+  })
+
